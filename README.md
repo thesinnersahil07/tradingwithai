@@ -389,7 +389,7 @@ bloomberg-agent-hive/
 
 Contributions from quantitative researchers, algorithmic traders, and AI agent developers are enthusiastically welcomed!
 
-1. Fork the Project (`https://github.com/your-username/bloomberg-agent-hive/fork`)
+1. Fork the Project (`https://github.com/thesinnersahil07/tradingwitai/fork`)
 2. Create your Feature Branch (`git checkout -b feature/AlphaUpgrade`)
 3. Commit your Changes (`git commit -m 'feat: Add Volatility Surface Skew to Sub-Agent Xi'`)
 4. Push to the Branch (`git push origin feature/AlphaUpgrade`)
