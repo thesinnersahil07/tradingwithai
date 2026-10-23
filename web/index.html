@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloomberg Agent Hive v6.0 | Institutional 21-Agent Web Terminal & TradingView</title>
+  <meta name="description" content="Institutional 21-Agent Quantitative Trading Terminal with Real-Time TradingView Live Chart Integration, Precision Buy/Sell Signals, TP/SL overlays, and Zero-Loss Protocol.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <!-- TradingView Official Advanced Charting Library -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+</head>
+<body>
+  <!-- Ambient Glow Background -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- Terminal Top Ribbon -->
+  <header class="terminal-header">
+    <div class="header-left">
+      <div class="terminal-logo">
+        <span class="logo-icon">⚡</span>
+        <div class="logo-text">
+          <span class="brand-title">BLOOMBERG AGENT HIVE <span class="version-tag">v6.0</span></span>
+          <span class="brand-subtitle">21-AGENT QUANT HEDGE FUND TERMINAL &bull; TRADINGVIEW LIVE</span>
+        </div>
+      </div>
+      <div class="system-status-pill">
+        <span class="status-dot pulsing"></span>
+        <span id="system-status-text">TRADINGVIEW LIVE DATA STREAM ACTIVE</span>
+      </div>
+    </div>
+
+    <!-- Quick Asset Switcher -->
+    <div class="asset-switcher-bar">
+      <button class="asset-tab active" data-symbol="NSE:NIFTY" data-display="NIFTY 50" data-cat="index">NIFTY 50</button>
+      <button class="asset-tab" data-symbol="NSE:BANKNIFTY" data-display="BANKNIFTY" data-cat="index">BANKNIFTY</button>
+      <button class="asset-tab" data-symbol="BSE:SENSEX" data-display="SENSEX" data-cat="index">SENSEX</button>
+      <button class="asset-tab" data-symbol="NSE:RELIANCE" data-display="RELIANCE" data-cat="stock">RELIANCE</button>
+      <button class="asset-tab" data-symbol="BINANCE:BTCUSDT" data-display="BTC / USD" data-cat="crypto">BTC / USDT</button>
+      <button class="asset-tab" data-symbol="BINANCE:ETHUSDT" data-display="ETH / USD" data-cat="crypto">ETH / USDT</button>
+      <button class="asset-tab" data-symbol="OANDA:XAUUSD" data-display="GOLD (XAU/USD)" data-cat="commodity">GOLD (XAU)</button>
+      <button class="asset-tab" data-symbol="TVC:USOIL" data-display="CRUDE OIL" data-cat="commodity">CRUDE OIL</button>
+    </div>
+
+    <div class="header-right">
+      <div class="live-clock-badge">
+        <span id="market-time">--:--:-- IST</span>
+      </div>
+      <button id="btn-run-all-agents" class="btn-primary-action">
+        <span class="btn-icon">⚡</span> ANALYZE &amp; MARK LEVELS
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Terminal Layout -->
+  <main class="terminal-grid">
+    <!-- Left Column: Master Execution & CEO Verdict -->
+    <section class="left-panel">
+      <!-- Master CEO Verdict Card -->
+      <div class="card master-verdict-card" id="ceo-verdict-card">
+        <div class="card-header">
+          <span class="panel-tag">CEO CONVICTION GATE</span>
+          <span class="regime-badge" id="market-regime-badge">STATE A (MOMENTUM TREND)</span>
+        </div>
+        
+        <div class="verdict-display">
+          <div class="verdict-action-badge" id="ceo-action-badge">
+            <span class="action-direction" id="action-direction">BUY / LONG</span>
+            <span class="action-grade" id="action-grade">GRADE A++ SNIPER</span>
+          </div>
+          <div class="conviction-score-box">
+            <div class="score-circle">
+              <span class="score-number" id="consensus-score">21</span>
+              <span class="score-denominator">/21</span>
+            </div>
+            <span class="score-label">UNANIMOUS GO</span>
+          </div>
+        </div>
+
+        <!-- Consensus Bar -->
+        <div class="consensus-progress-track">
+          <div class="consensus-progress-fill" id="consensus-progress-bar" style="width: 100%;"></div>
+        </div>
+
+        <!-- Execution Ticket Details with Exact Buy/Sell/TP/SL -->
+        <div class="ticket-specs">
+          <div class="spec-row highlight-entry">
+            <span class="spec-label">TRIGGER ENTRY (BUY)</span>
+            <span class="spec-value highlight-cyan" id="ticket-entry">24,850.00</span>
+          </div>
+          <div class="spec-row highlight-sl">
+            <span class="spec-label">HARD STOP LOSS (SL)</span>
+            <span class="spec-value highlight-red" id="ticket-sl">24,750.00</span>
+          </div>
+          <div class="spec-row highlight-tp1">
+            <span class="spec-label">ZERO-LOSS TP1 (50% SCALE)</span>
+            <span class="spec-value highlight-amber" id="ticket-tp1">24,950.00</span>
+          </div>
+          <div class="spec-row highlight-tp2">
+            <span class="spec-label">PRIMARY RUNNER TP2</span>
+            <span class="spec-value highlight-green" id="ticket-tp2">25,100.00</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">REWARD : RISK RATIO</span>
+            <span class="spec-value highlight-gold" id="ticket-rr">1 : 2.50 (Convex)</span>
+          </div>
+        </div>
+
+        <!-- Zero-Loss Protocol Banner -->
+        <div class="zero-loss-alert">
+          <div class="shield-icon">🛡️</div>
+          <div class="alert-content">
+            <strong>ZERO-LOSS "FREE-TRADE" PROTOCOL:</strong>
+            <p>At TP1 (<span id="alert-tp1">24,950.00</span>), close 50% profit. Stop instantly locks to Breakeven (<span id="alert-be">24,852.50</span>). Worst-case = <strong>+0.5R Net Profit</strong>.</p>
+          </div>
+        </div>
+
+        <!-- Position Sizing & Safety Metrics -->
+        <div class="sizing-grid">
+          <div class="sizing-stat">
+            <span class="stat-name">NSE LOTS / SHARES</span>
+            <span class="stat-val" id="ticket-lots">1 Lot (65 Qty)</span>
+          </div>
+          <div class="sizing-stat">
+            <span class="stat-name">QUARTER-KELLY</span>
+            <span class="stat-val" id="ticket-kelly">11.8% Risk</span>
+          </div>
+          <div class="sizing-stat">
+            <span class="stat-name">RISK OF RUIN</span>
+            <span class="stat-val highlight-green" id="ticket-ror">0.1% (Safe)</span>
+          </div>
+          <div class="sizing-stat">
+            <span class="stat-name">99% CVaR TAIL RISK</span>
+            <span class="stat-val highlight-green" id="ticket-cvar">2.1% Acct</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Trade Autopsy & Self-Evolution Trigger -->
+      <div class="card autopsy-card">
+        <div class="card-header">
+          <span class="panel-tag">SUB-AGENT SIGMA RECURSIVE EVOLUTION</span>
+          <span class="epoch-badge" id="epoch-badge">EPOCH #4</span>
+        </div>
+        <p class="card-desc">Log trade outcomes to trigger automated prompt mutation, weight calibration, and rule adaptation.</p>
+        
+        <div class="autopsy-form">
+          <div class="form-row">
+            <select id="autopsy-outcome" class="input-dark">
+              <option value="win">Win (Target Hit)</option>
+              <option value="loss">Loss (Stop-Loss Hit)</option>
+              <option value="breakeven">Breakeven / Scratch</option>
+            </select>
+            <select id="autopsy-failure" class="input-dark">
+              <option value="none">Flawless Confluence</option>
+              <option value="liquidity_trap">Liquidity Trap / Fakeout</option>
+              <option value="microstructure_spoof">Order Book Spoofing</option>
+              <option value="macro_shock">Macro Shock / Red News</option>
+              <option value="cvd_false_positive">CVD Delta Divergence Failed</option>
+              <option value="lead_lag_divergence">Lead-Lag Transmission Divergence</option>
+            </select>
+          </div>
+          <button id="btn-submit-autopsy" class="btn-secondary-action">
+            ⚡ LOG &amp; RECALIBRATE AGENTS
+          </button>
+        </div>
+        <div id="evolution-notification" class="evolution-toast hidden"></div>
+      </div>
+    </section>
+
+    <!-- Center Column: TradingView Live Interactive Chart -->
+    <section class="center-panel">
+      <div class="card chart-card">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <span class="chart-asset" id="chart-symbol-display">NIFTY 50 INDEX</span>
+            <span class="chart-price" id="chart-live-price">24,850.25</span>
+            <span class="chart-change positive" id="chart-change">+142.80 (+0.58%)</span>
+          </div>
+          <div class="chart-controls">
+            <!-- Custom Ticker Search Input -->
+            <div class="symbol-search-box">
+              <input type="text" id="custom-symbol-input" placeholder="Search Symbol (e.g. NASDAQ:AAPL, BTCUSDT)" class="input-dark" style="width: 250px; padding: 4px 10px; font-size: 11px;">
+              <button id="btn-load-custom-symbol" class="btn-small">LOAD</button>
+            </div>
+            <div class="timeframe-buttons">
+              <button class="tf-btn" data-interval="5">5m</button>
+              <button class="tf-btn active" data-interval="15">15m</button>
+              <button class="tf-btn" data-interval="60">1H</button>
+              <button class="tf-btn" data-interval="240">4H</button>
+              <button class="tf-btn" data-interval="D">1D</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TradingView Live Container -->
+        <div class="chart-viewport" id="tradingview_chart_container">
+          <!-- TradingView Widget Injected Here -->
+        </div>
+
+        <!-- Live Institutional Targets Floating HUD -->
+        <div class="chart-live-hud">
+          <div class="hud-pill entry-pill">
+            <span class="hud-tag">BUY ENTRY</span>
+            <span class="hud-price" id="hud-entry">24,850.00</span>
+          </div>
+          <div class="hud-pill sl-pill">
+            <span class="hud-tag">STOP LOSS</span>
+            <span class="hud-price" id="hud-sl">24,750.00</span>
+          </div>
+          <div class="hud-pill tp1-pill">
+            <span class="hud-tag">ZERO-LOSS TP1</span>
+            <span class="hud-price" id="hud-tp1">24,950.00</span>
+          </div>
+          <div class="hud-pill tp2-pill">
+            <span class="hud-tag">RUNNER TP2</span>
+            <span class="hud-price" id="hud-tp2">25,100.00</span>
+          </div>
+        </div>
+
+        <!-- Telemetry Ribbon -->
+        <div class="telemetry-ribbon">
+          <div class="telem-item">
+            <span class="telem-label">LIVE DATA FEED</span>
+            <span class="telem-val highlight-green">TRADINGVIEW STREAM</span>
+          </div>
+          <div class="telem-item">
+            <span class="telem-label">MTF STRUCTURE</span>
+            <span class="telem-val highlight-cyan" id="val-mtf">15m FVG Validated</span>
+          </div>
+          <div class="telem-item">
+            <span class="telem-label">CVD DELTA</span>
+            <span class="telem-val positive" id="val-cvd">Bullish Absorption</span>
+          </div>
+          <div class="telem-item">
+            <span class="telem-label">L2 OBI SCORE</span>
+            <span class="telem-val highlight-cyan" id="val-obi">+0.48 (Heavy Bids)</span>
+          </div>
+          <div class="telem-item">
+            <span class="telem-label">99% CVaR</span>
+            <span class="telem-val highlight-green" id="val-cvar">2.1% (Safe)</span>
+          </div>
+          <div class="telem-item">
+            <span class="telem-label">TIME-STOP</span>
+            <span class="telem-val highlight-gold" id="val-timestop">3 Bars (45m)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: 21-Agent Real-Time Radar Matrix -->
+    <section class="right-panel">
+      <div class="card agents-radar-card">
+        <div class="card-header">
+          <span class="panel-tag">21-AGENT MULTI-DIMENSIONAL CONCURRENCE</span>
+          <span class="live-pulse-badge">LIVE RADAR</span>
+        </div>
+        
+        <!-- Filter Tabs for Agents -->
+        <div class="agent-filter-tabs">
+          <button class="ag-filter active" data-filter="all">ALL (21)</button>
+          <button class="ag-filter" data-filter="core">CORE</button>
+          <button class="ag-filter" data-filter="quant">QUANT</button>
+          <button class="ag-filter" data-filter="alpha">ALPHA</button>
+        </div>
+
+        <!-- Scrollable 21-Agent Grid -->
+        <div class="agents-list" id="agents-grid">
+          <!-- Dynamically populated via app.js -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Agent Details Modal -->
+  <div id="agent-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-agent-id" id="modal-agent-id">01 Alpha</span>
+          <h3 class="modal-agent-name" id="modal-agent-name">News &amp; Insider Sentinel</h3>
+        </div>
+        <button id="btn-close-modal" class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-agent-body">
+        <!-- Injected details -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
