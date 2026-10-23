@@ -1,0 +1,36 @@
+[
+  {
+    "timestamp_utc": "2026-10-23T09:36:37.316742+00:00",
+    "epoch": 1,
+    "sample_trades_analyzed": 0,
+    "empirical_win_rate_pct": 0.0,
+    "failure_clusters_detected": {},
+    "autonomous_rule_upgrades": [
+      {
+        "target_agent": "Hive Core",
+        "rule": "BASELINE_OPTIMIZATION_ACTIVE: Zero critical failure clusters detected. Preserving current optimal hyperparameters.",
+        "status": "MONITORING"
+      }
+    ],
+    "calibrated_weights": {
+      "alpha_news": 1.0,
+      "beta_chart_smc": 1.0,
+      "gamma_cvd": 1.0,
+      "delta_derivatives": 1.0,
+      "epsilon_risk": 1.0,
+      "zeta_sizing": 1.0,
+      "omega_montecarlo": 1.0,
+      "eta_macro": 1.0,
+      "theta_seasonality": 1.0,
+      "iota_sentiment": 1.0,
+      "kappa_breadth": 1.0,
+      "lambda_wyckoff": 1.0,
+      "mu_dark_pool": 1.0,
+      "nu_ict": 1.0,
+      "xi_options": 1.0,
+      "omicron_microstructure": 1.0,
+      "pi_convex_hedge": 1.0,
+      "sigma_meta_learning": 1.0
+    }
+  }
+]
